@@ -1,0 +1,7 @@
+content
+*.pyc
+*.pyo
+.idea
+db.sqlite3
+migrations
+settings.py
