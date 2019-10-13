@@ -1,0 +1,37 @@
+{% extends 'layouts/default/page.html' %}
+{% load staticfiles %}
+{% block content %}
+
+    <!--<h1>Dates with Events in it </h1>-->
+    <!--{% for date in dates %}-->
+        <!--<h5>{{ date.date }}</h5>-->
+        <!--<h6>{{ date.title }}</h6>-->
+        <!--<a href="{% url 'day-view' date=date.pk %}"><button class="btn btn-info">Go to Events</button></a>-->
+    <!--{% endfor %}-->
+    <style>
+        .Calendar-Division{
+            text-align : center ;
+            font-size : 1.2rem ;
+            color : black;
+        }
+        .Row {
+            width : 13vw ;
+            height : 10vh ;
+            text-align : center ;
+            font-size : 1.0rem ;
+            color : grey ;
+        }
+        .week2 {
+            background : grey ;
+        }
+    </style>
+    <div class="Calendar-Division">
+        {{ calendar }}
+        <hr>
+        <div class="d-flex align-items-center" style="justify-content: space-evenly;">
+            <a href={{previous_month }}><button class="btn btn-info"><<</button></a>
+            <a href={{current_month}}><button class="btn btn-info">Current Month</button></a>
+            <a href={{next_month }}><button class="btn btn-info">>></button></a>
+        </div>
+    </div>
+{% endblock %}

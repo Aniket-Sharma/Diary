@@ -1,0 +1,174 @@
+{% extends 'layouts/default/page.html' %}
+
+{% load bootstrap4 %}
+
+{% load i18n %}
+
+{% block content %}
+<style>
+    .Reply {
+        border: 1px solid grey;
+        padding: 2% 2% 2% 2%;
+        background: white;
+        font-family: BioRhyme;
+    }
+
+    .Reply:hover {
+        background: lightgrey;
+        cursor: pointer;
+    }
+
+    .Posts {
+        padding: 2% 2% 2% 2%;
+    }
+
+    .Notifications {
+        min-height: 80vh;
+    }
+
+    .Notification {
+        border: 1px solid grey;
+        padding: 2% 2% 2% 2%;
+        margin: 1% 0 1% 0;
+        background: silver;
+        font-family: BioRhyme;
+    }
+
+    .Notification:hover {
+        background: grey;
+        cursor: pointer;
+    }
+
+    .Message {
+        border: 1px solid black;
+        padding: 2% 2% 2% 2%;
+        margin: 1% 0 1% 0;
+        background: lightblue;
+        font-family: BioRhyme;
+        max-height: 4rem;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .Message:hover {
+        max-height: 100vh;
+        transition: 5s;
+    }
+
+    .message-body {
+        background: white;
+        padding: 1% 1% 1% 1%;
+    }
+    .info {
+        padding : 2% 2% 2% 2% ;
+        font-family : Yatra One ;
+    }
+</style>
+{% if request.user.is_authenticated %}
+<div class="info" id="#userinfo">
+    <h2>{{request.user.first_name}} {{request.user.last_name}} @{{request.user.username}}</h2>
+    <h3>{{ request.user.email }}</h3>
+    <h6> Last Login : {{ request.user.last_login }} </h6>
+    <a href="{% url 'accounts:change_profile' %}"><button class="btn">Edit Profile</button></a>
+
+</div>
+
+{% if request.user.is_superuser %}
+<hr>
+<div class="Messages">
+    <h2>Messages</h2>
+    <hr>
+    <ul>
+        {% for message in msgs %}
+        <li class="Message">
+            <p><b>{{ message.name }}</b> has sent you a message</p>
+            <div class="message-body">
+                <h6><b>Email</b> : {{ message.email }}</h6>
+                <hr>
+                <p>{{ message.message }} </p>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+<hr>
+
+<div class="Subscriptions" id="mysubscriptions">
+    <h3>Your Subscriptions</h3>
+    <hr>
+    <div class="d-flex" style="flex-wrap: wrap;">
+
+        {% for series in all_series %}
+
+        {% if request.user.username in series.subscribed_users %}
+
+        <div class="Registered Tutorial" style="border: 1px solid black; cursor: pointer;"
+            onclick="window.location='{% url 'series_content' series_pk=series.pk %}' ">
+            <h3><b>{{series.title}}</b> </h3>
+            <h6><em><b>Tutor: </b> {{series.tutor}}</em> </h6>
+            <p> {{series.description}} </p>
+        </div>
+
+        {% endif %}
+
+        {% endfor %}
+    </div>
+</div>
+<hr>
+
+<h3>Your Posts</h3>
+<hr>
+<div class="Posts" id="myposts">
+    {% for post in posts %}
+    <div class="Post">
+        <h4> {{ post.title|safe }}</h4>
+        <p style="text-align: right; "></p>
+        <p>{{ post.post|safe }}</p>
+    </div>
+    <p> <a href="#">&uArr; {{post.up_vote}} Upvotes</a>&emsp;<a href="#">&dArr; {{post.down_vote}} Downvotes</a>&emsp;
+    </p>
+    <hr>
+    {% endfor %}
+</div>
+
+<div class="Replies" id="myreplies">
+    <h3>Recent Activities </h3>
+    <hr>
+    <ul>
+        {% for reply in replies %}
+        {% if reply.user == request.user.username %}
+        <li class="Reply">
+            You replied "{{reply.post}}" to <b>your own </b> post titled : "{{reply.forum_post.title }}"
+        </li>
+        {% else %}
+        <li class="Reply">
+            You replied "{{reply.post}}" to <b>{{ reply.forum_post.sender }}'s</b> post titled :
+            "{{reply.forum_post.title }}"
+        </li>
+        {% endif %}
+        <br>
+        {% endfor %}
+    </ul>
+</div>
+<hr>
+<h3> Notifications </h3>
+<hr>
+<div class="Notifications" id="mynotifications">
+    <ul>
+        {% for notification in notifications %}
+        <li class="Notification">
+            <b>{{notification.user }}</b> replied "{{notification.post}}" to your post titled:
+            "{{notification.forum_post.title}}"
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+{% else %}
+
+<h3>Please <a href="{% url 'accounts:log_in' %}">Sign in</a> to access your profile. </h3>
+
+{% endif %}
+
+{% endblock %}

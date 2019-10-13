@@ -1,0 +1,23 @@
+.profile-img-card {
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 10px;
+    display: block;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+.card-container.card {
+    bg-color: blue ;
+    min-width: 50%;
+    max-width: 1500px;
+    padding: 20px 20px  ;
+}
+.zoom {
+    border: 0.5px; 
+    border-radius: 10px;
+    box-shadow:10px 10px 10px grey;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+

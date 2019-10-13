@@ -1,0 +1,55 @@
+{% extends 'layouts/default/page.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<h1>Events</h1>
+<div class="Public-Long-Posts">
+    <h3>Public Posts</h3>
+    {% for post in public_long_posts %}
+        {{post.post}}
+    {% endfor %}
+</div><hr>
+<div class="Public-Short-Posts">
+    {% for post in public_short_posts %}
+        {{ post.post }}
+        {{ post.posted_at }}
+    {% endfor %}
+</div><hr>
+<div class="Hidden-Long-Posts">
+    <h3>Hidden Posts</h3>
+    {% for post in hidden_long_posts %}
+        {{post.post}}
+    {% endfor %}
+</div><hr>
+<div class="Hidden-Short-Posts">
+    {% for post in hidden_short_posts %}
+        {{ post.post }}
+        {{ post.posted_at }}
+    {% endfor %}
+</div><hr>
+<div class="On-Demand-Long-Posts">
+    <h3>Show after getting permissions Posts</h3>
+    {% for post in on_permission_long_posts %}
+        {{post.post}}
+    {% endfor %}
+</div><hr>
+<div class="On-Permission-Short-Posts">
+    {% for post in on_permission_short_posts %}
+        {{ post.post }}
+        {{ post.posted_at }}
+    {% endfor %}
+</div><hr>
+<div class="Private-Long-Posts">
+    <h3>Public Posts</h3>
+    {% for post in private_long_posts %}
+        {{post.post}}
+    {% endfor %}
+</div><hr>
+<div class="Private-Short-Posts">
+    {% for post in private_short_posts %}
+        {{ post.post }}
+        {{ post.posted_at }}
+    {% endfor %}
+</div><hr>
+
+{% endblock %}

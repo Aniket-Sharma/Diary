@@ -1,0 +1,128 @@
+{% extends 'layouts/default/page.html' %}
+
+{% load i18n %}
+
+{% load bootstrap4 %}
+
+{% load static %}
+
+{% block content %}
+<style>
+    #post-form {
+        display: none;
+        position: fixed;
+        width: 80vw;
+        height: 70vh;
+        top: 1;
+    }
+
+    #close {
+        position: absolute;
+        right: -10px;
+        top: -10px;
+        cursor: pointer;
+    }
+
+    #form-post {
+        border: 2px solid gray;
+        border-radius: 5px;
+        background-color: #fff;
+        width: 100%;
+        padding: 1% 1% 1% 1%;
+    }
+
+    .Title {
+        height: 10vh;
+    }
+
+    .Reply {
+        height: 60px;
+    }
+
+    .Post {
+        font-family: BioRhyme;
+    }
+
+    .anim {}
+
+    .anim:hover {
+        transform: scale(1.01);
+    }
+</style>
+<div class="container">
+
+    <div id="post-form" style="text-align: center">
+        <button class="btn btn-danger" id="close" onclick="div_hide()">&#10006;</button>
+        <form id="form-post" action="{% url 'home' %}" method="post" role="form">
+            <h3>New Post</h3>
+            <hr>
+            {% csrf_token %}
+            <input type="hidden" name="username" value="{{ request.user.username }}">
+            {% bootstrap_form post_form  layout="inline" %}
+            {% if request.user.is_authenticated %}
+            <button class="btn btn-success" type="submit">Send</button>
+            {% else %}
+            <h6><a href="{% url 'accounts:log_in' %}">Sign in</a> to post anything</h6>
+            {% endif %}
+        </form>
+    </div>
+
+    <h2>Recent Posts </h2>
+    <h5 style="text-align : right; ">Want to share something of your own : <button class="btn btn-primary" id="popup"
+            onclick="div_show()">Create a New Post</button></h5>
+    <hr>
+    <div class="All-Posts">
+
+        <div class="Post">
+            <div class="container">
+                {% for post in posts %}
+                <h4> <b>{{ post.title|safe }}</b></h4>
+                <p style="text-align: right; ">posted by: <b>{{ post.sender }}</b> at {{ post.posted_at }}</p>
+                <div>
+                    <p style="background-color: lightgrey ; padding-left: 10px">
+                        {{ post.post|safe }}
+                    </p>
+                </div>
+                <hr>
+                <p> <a href="#">&uArr; {{post.up_vote}} Upvotes</a>&emsp;<a href="#">&dArr; {{post.down_vote}}
+                        Downvotes</a>&emsp; </p>
+
+                <div class="replies only-so-big">
+                    <h4>Comments:</h4>
+                    {% for reply in replies %}
+                    {% if reply.forum_post.pk == post.pk %}
+                    <div class="Reply">
+                        [{{ reply.posted_at }}] <b>{{reply.user}}</b> : {{ reply.post|safe }}
+                    </div>
+                    <hr>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <form id="post-reply-form" action="{% url 'post_reply' post_id=post.pk %}" method="post" role="form">
+                    {% csrf_token %}
+                    {% bootstrap_form reply_form  size="small" show_label=False %}
+                    {% if request.user.is_authenticated %}
+                    <button class="btn btn-success" type="submit">Post Reply</button>
+                    {% else %}
+                    <h6><a href="{% url 'accounts:log_in' %}">Sign in</a> to post anything</h6>
+                    {% endif %}
+                </form>
+                <hr>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    //Function To Display Popup
+    function div_show() {
+        document.getElementById('post-form').style.display = "block";
+    }
+    //Function to Hide Popup
+    function div_hide() {
+        document.getElementById('post-form').style.display = "none";
+    }
+</script>
+
+{% endblock %}
