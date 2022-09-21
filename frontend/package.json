@@ -13,7 +13,7 @@
     "@fullcalendar/vue": "^4.3.1",
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
-    "vuetify": "^2.0.0"
+    "vuetify": "^2.6.10"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.11.0",
